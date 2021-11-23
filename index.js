@@ -36,7 +36,7 @@ function randomfFunc(data, index) {
   if (data.length === 1) {
     answer.push(data[0]);
   }
-  console.log(`${index} 조 팀장 :: `, answer[0]);
+  console.log(`👑${index} 조 팀장👑 `, answer[0]);
   return answer;
 }
 
