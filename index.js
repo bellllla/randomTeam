@@ -1,45 +1,61 @@
-const teams = [
-  "Bella",
-  "Bryan",
-  "Joy",
-  "Judy",
+const axios = require("axios").default;
+require("dotenv").config();
+console.log(process.env.WEBHOOKURL);
 
-  "Yujhin",
-  "Joe",
-  "Sean",
-  "Hailey",
+const sendMsg = async () => {
+  const teams = [
+    "Bella",
+    "Bryan",
+    "Joy",
+    "Judy",
 
-  "Danna",
-  "Matthew",
-  "Benjamin",
-  "Sebastian",
-  "jay",
-];
+    "Yujhin",
+    "Joe",
+    "Sean",
+    "Hailey",
 
-function randomfFunc(data, index) {
-  let answer = [];
-  let n = 0;
+    "Danna",
+    "Matthew",
+    "Benjamin",
+    "Sebastian",
+    "jay",
+  ];
 
-  while (n <= 3) {
-    const idx = Math.floor(Math.random() * data.length);
+  function randomfFunc(data) {
+    let answer = [];
+    let n = 0;
 
-    answer.push(data[idx]);
-    data.splice(idx, 1);
-    n += 1;
+    while (n <= 3) {
+      const idx = Math.floor(Math.random() * data.length);
 
-    if ("jay" === answer[0]) {
-      answer.shift();
-      answer.push("jay");
+      answer.push(data[idx]);
+
+      data.splice(idx, 1);
+      n += 1;
+
+      if ("jay" === answer[0]) {
+        answer.shift();
+        answer.push("jay");
+      }
     }
+    if (data.length === 1) {
+      answer.push(data[0]);
+    }
+    return `👑 Leader_${answer[0]} 👑 [${answer}]`;
   }
-  //   console.log('data:::',data)
-  if (data.length === 1) {
-    answer.push(data[0]);
-  }
-  console.log(`👑${index} 조 팀장👑 `, answer[0]);
-  return answer;
-}
 
-console.log(randomfFunc(teams, 1));
-console.log(randomfFunc(teams, 2));
-console.log(randomfFunc(teams, 3));
+  const randoms = [`CoffeeTime Teams : ${randomfFunc(teams)}, ${randomfFunc(teams)}, ${randomfFunc(teams)}`];
+
+  console.log(randoms);
+
+  try {
+    await axios.post(process.env.WEBHOOKURL, {
+      teams: JSON.stringify(randoms),
+    });
+    console.log("sent");
+  } catch (error) {
+    console.log(error.response);
+  }
+};
+
+sendMsg();
